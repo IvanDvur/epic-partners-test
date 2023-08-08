@@ -1,0 +1,68 @@
+openapi: '3.0.1'
+
+info:
+  title: Counter
+  version: "1"
+  description: Counter impl
+
+servers:
+  - url: http://localhost:8080/api
+    description: Counter server
+
+paths:
+
+  /counter:
+    post:
+      summary: Метод для инкрементации счётчика на указанное в теле значение
+      operationId: incrementCount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterRequestDTO'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterResponseDTO'
+    get:
+      summary: Get Counter Value By Id
+      operationId: getCount
+      parameters:
+        - name: counterId
+          in: query
+          description: Id счётчика, значение которого мы хотим получить
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterResponseDTO'
+
+
+
+components:
+  schemas:
+    CounterRequestDTO:
+      type: object
+      description: Data for incrementing counter
+      properties:
+        counterId:
+          type: string
+          minLength: 1
+          maxLength: 10
+        incrementCount:
+          type: integer
+          minimum: 1
+    CounterResponseDTO:
+      type: integer
+      description: Value of counter
+      properties:
+        value:
+          type: integer
