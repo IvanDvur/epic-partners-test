@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+
+  counter-server:
+    restart: on-failure
+    container_name: counter-test-server
+    image: ivandvurechenskiy/counter-test
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/testdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    ports:
+      - "8080:8080"
+  db:
+    image: mysql
+    restart: always
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    environment:
+      MYSQL_DATABASE: testdb
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
