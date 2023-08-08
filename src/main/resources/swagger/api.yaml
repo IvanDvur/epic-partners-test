@@ -27,6 +27,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CounterResponseDTO'
+        404:
+          description: Counter id not found
+        400:
+          description: Invalid Request Body
     get:
       summary: Get Counter Value By Id
       operationId: getCount
@@ -52,6 +56,9 @@ components:
     CounterRequestDTO:
       type: object
       description: Data for incrementing counter
+      required:
+        - counterId
+        - incrementCount
       properties:
         counterId:
           type: string
@@ -61,7 +68,7 @@ components:
           type: integer
           minimum: 1
     CounterResponseDTO:
-      type: integer
+      type: object
       description: Value of counter
       properties:
         value:
