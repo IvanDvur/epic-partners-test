@@ -4,15 +4,12 @@ import com.epicpartners.countertest.api.CounterApiDelegate;
 import com.epicpartners.countertest.model.Counter;
 import com.epicpartners.countertest.model.CounterRequestDTO;
 import com.epicpartners.countertest.model.CounterResponseDTO;
-import com.epicpartners.countertest.repositories.CounterRepository;
 import com.epicpartners.countertest.service.CounterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +19,7 @@ public class CounterDelegateImpl implements CounterApiDelegate{
 
     @Override
     public ResponseEntity<CounterResponseDTO> incrementCount(CounterRequestDTO counterRequestDTO) {
-        CounterResponseDTO responseDTO = counterService.incrementCounter(counterRequestDTO);
-        if (responseDTO != null) {
-            return ResponseEntity.ok(responseDTO);
-        }
-        return ResponseEntity.notFound().build();
+        return counterService.incrementCounter(counterRequestDTO);
     }
 
     public Counter getCounter(String counterId){

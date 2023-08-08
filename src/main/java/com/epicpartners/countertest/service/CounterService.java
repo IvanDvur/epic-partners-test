@@ -7,27 +7,34 @@ import com.epicpartners.countertest.repositories.CounterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class CounterService {
 
-
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final CounterRepository counterRepository;
 
-    public CounterResponseDTO incrementCounter(CounterRequestDTO requestDTO) {
+    public ResponseEntity<CounterResponseDTO> incrementCounter(CounterRequestDTO requestDTO) {
         Optional<Counter> optCounter = counterRepository.findById(requestDTO.getCounterId());
         if (optCounter.isEmpty()) {
-            return null;
+            return ResponseEntity.notFound().build();
+        }
+        Set<ConstraintViolation<CounterRequestDTO>> violations = validator.validate(requestDTO);
+        if(!violations.isEmpty()){
+            return ResponseEntity.badRequest().build();
         }
         Counter c = optCounter.get();
         Integer prevValue = c.getValue();
         c.setValue(prevValue + requestDTO.getIncrementCount());
         counterRepository.save(c);
-        return new CounterResponseDTO().value(c.getValue());
+        return ResponseEntity.ok(new CounterResponseDTO().value(c.getValue()));
     }
 
     public CounterResponseDTO getCount(String counterId){

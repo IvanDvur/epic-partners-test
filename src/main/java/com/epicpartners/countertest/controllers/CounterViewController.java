@@ -1,13 +1,9 @@
 package com.epicpartners.countertest.controllers;
 
-import com.epicpartners.countertest.api.CounterApiController;
-import com.epicpartners.countertest.api.CounterApiDelegate;
+
 import com.epicpartners.countertest.delegate.CounterDelegateImpl;
 import com.epicpartners.countertest.model.CounterRequestDTO;
-import com.epicpartners.countertest.model.CounterResponseDTO;
-import com.epicpartners.countertest.service.CounterService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +17,15 @@ public class CounterViewController{
 
     @GetMapping("/view")
     public String getCounterView(Model model, @RequestParam("counterId") String counterId){
+        model.addAttribute("dto",new CounterRequestDTO());
         model.addAttribute("counter",counterApiDelegate.getCounter(counterId));
         return "counter";
     }
 
     @PostMapping
-    public String incrementCounter(@ModelAttribute("request") CounterRequestDTO dto){
+    public String incrementCounter(@ModelAttribute("dto") CounterRequestDTO dto){
         counterApiDelegate.incrementCount(dto);
-        return "allcounters";
+        return "redirect:/";
     }
 
 }
