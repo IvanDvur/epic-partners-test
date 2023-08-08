@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Всё счётчики</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="main-content">
+<div class="container justify-content-center">
+  <h1 class="text-center">Все счётчики</h1>
+  <table class="table mt-5">
+    <thead>
+    <tr class="justify-content-center text-center">
+      <th class="h3">Id счётчика</th>
+      <th class="h3">Значение счётчика</th>
+      <th class="h3">Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="text-center" th:each="c:${allCounters}">
+      <td class="h4" th:text="${c.getId()}"></td>
+      <td class="h4" th:text="${c.getValue()}"></td>
+      <td>
+        <a th:href="@{/counter/view(counterId=${c.getId()})}" class=" btn btn-primary" type="submit">Инкрементировать</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
